@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 public class Client {
 
     @EqualsAndHashCode.Include

@@ -34,24 +34,17 @@ public class Config {
 
         this.user = "bitbank";
         this.senha = "bitbank";
-        this.host = "129.0.0.221";
-        this.port = 5350;
+        this.host = "localhost";
+        this.port = 5400;
         this.dbName = "bitbank";
 
-        // this.user = "admin";
-        // this.senha = "RDMXKGKVYEDIHYSB";
-        // this.host = "sl-us-south-1-portal.3.dblayer.com";
-        // this.port = 21287;
-        // this.dbName = "compose";
-
-    }
+      }
 
     @Bean
     @Primary
     public DataSource dataSource() {
 
         String url = String.format("jdbc:postgresql://%s:%s/%s", this.host, this.port, this.dbName);
-        System.out.println("@@@@@@ LOCAL DATABASE: " + url);
         return DataSourceBuilder.create().username(this.user).password(this.senha).url(url).build();
     }
 

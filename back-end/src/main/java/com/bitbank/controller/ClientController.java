@@ -1,17 +1,31 @@
 package com.bitbank.controller;
 
-import com.bitbank.domain.model.Client;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import com.bitbank.domain.model.Client;
+import com.bitbank.domain.repository.ClienteRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.AllArgsConstructor;
 
 @RestController
 public class ClientController {
 
-    @GetMapping("/clients")
-    public Client listar() {
-        Client client = new Client();
-        client.setCpf(1L);
-        return client;
+    @PersistenceContext
+    private EntityManager em;
+
+    @Autowired
+    public ClienteRepository clienteRepository;
+
+    @GetMapping("/client")
+    public List<Client> listar() {
+
+        return clienteRepository.findAll();
     }
 }
