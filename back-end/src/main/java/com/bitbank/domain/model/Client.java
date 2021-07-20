@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +21,15 @@ public class Client {
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
+    
     private String name;
+    private String username;
     private Long cpf;
     private String email;
+    private String password;
+    private boolean admin;
+
 
     @Override
     public int hashCode() {
@@ -48,5 +55,5 @@ public class Client {
             return false;
         return true;
     }
-
+    
 }
