@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -21,8 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-        // auth.inMemoryAuthentication().withUser("juliao").password("123456").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("juliao").password("{noop}123456").roles("ADMIN").and()
+        .withUser("test2").password("test2").roles("USER");
 
-    }
+    }    
     
 }

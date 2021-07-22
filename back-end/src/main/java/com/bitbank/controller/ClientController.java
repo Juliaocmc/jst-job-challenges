@@ -6,25 +6,27 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.bitbank.domain.model.Client;
-import com.bitbank.domain.repository.ClienteRepository;
+import com.bitbank.model.Client;
+import com.bitbank.server.ClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
 
+
+@RequestMapping(path = "/client")
+@SuppressWarnings("rawtypes")
 @RestController
 public class ClientController {
 
@@ -32,22 +34,23 @@ public class ClientController {
     private EntityManager em;
 
     @Autowired
-    public ClienteRepository clienteRepository;
+    public ClientService cs;
 
-    @GetMapping("/client")
+    @GetMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Client> findAll() {
-        return clienteRepository.findAll();
+        return cs.findAll();
     }
-
+    
     @GetMapping("/client/{id}")
-    public ResponseEntity<Client> getUserById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        var client = clienteRepository.getById(id);
+    public ResponseEntity<Optional<Client>> getUserById(@PathVariable String clientId) {
+        var client = cs.findById(clientId);
         return ResponseEntity.ok(client);
         
     }
 
-    @PostMapping("/client")
-    public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody Client client) {
+    @PostMapping("")
+    public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody Client client) throws Exception {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         var newClient = new Client();
         newClient.setPassword(passwordEncoder.encode(client.getPassword()));
@@ -57,15 +60,14 @@ public class ClientController {
         newClient.setName(client.getName());
         newClient.setUsername(client.getUsername());   
         newClient.setEmail(client.getEmail());
-        clienteRepository.save(newClient);
+        cs.save(newClient);
         return ResponseEntity.ok(newClient);
         
     }
 
     @DeleteMapping("/client/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        var client = clienteRepository.getById(id);
-        clienteRepository.deleteById(client.getId());
+    public ResponseEntity<String> delete(@PathVariable String clientId) {
+        cs.delete(clientId);
         return ResponseEntity.ok("Ok");
         
     }
