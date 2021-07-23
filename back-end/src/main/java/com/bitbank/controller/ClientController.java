@@ -63,7 +63,7 @@ public class ClientController {
         
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{clientId}")
     public ResponseEntity<String> delete(@PathVariable String clientId) {
         cs.delete(clientId);
         return ResponseEntity.ok("Ok");
