@@ -2,13 +2,17 @@ package com.bitbank.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.bitbank.dto.ClientDto;
+import com.bitbank.dto.ClientTestizinho;
 import com.bitbank.model.Client;
 import com.bitbank.server.ClientService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,34 +36,29 @@ public class ClientController {
     private EntityManager em;
 
     @Autowired
+    public ModelMapper modelMapper;
+
+    @Autowired
     public ClientService cs;
 
-    @GetMapping("/")
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public List<Client> findAll() {
-        return cs.findAll();
+    @GetMapping("")
+    public ResponseEntity<List<ClientDto>> findAll() {
+        return ResponseEntity.ok(cs.findAll().stream().map(this::toDto).collect(Collectors.toList()));
     }
     
     @GetMapping("/{clientId}")
-    public ResponseEntity<Optional<Client>> getUserById(@PathVariable String clientId) {
-        var client = cs.findById(clientId);
-        return ResponseEntity.ok(client);
-        
+    public ResponseEntity<ClientDto> getUserById(@PathVariable String clientId) {   
+        var client = cs.getById(clientId);
+        return ResponseEntity.ok(toDto(client));
     }
 
-    @PostMapping("/")
-    public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody Client client) throws Exception {
+    @PostMapping("")
+    public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody ClientDto clientDto) throws Exception {
+        var client = modelMapper.map(clientDto, Client.class);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        var newClient = new Client();
-        newClient.setPassword(passwordEncoder.encode(client.getPassword()));
-        newClient.setAdmin(client.isAdmin());
-        newClient.setCpf(client.getCpf());  
-        newClient.setId(client.getId());
-        newClient.setName(client.getName());
-        newClient.setUsername(client.getUsername());   
-        newClient.setEmail(client.getEmail());
-        cs.save(newClient);
-        return ResponseEntity.ok(newClient);
+        client.setPassword(passwordEncoder.encode(client.getPassword()));        
+        cs.save(client);
+        return ResponseEntity.ok(client);
         
     }
 
@@ -69,4 +68,11 @@ public class ClientController {
         return ResponseEntity.ok("Ok");
         
     }
+
+
+    private ClientDto toDto(Client client){
+        return modelMapper.map(client, ClientDto.class);
+    }
+
+   
 }

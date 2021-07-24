@@ -20,8 +20,8 @@ public class ClientService {
         cd.save(client);
     }
 
-    public Optional<Client> findById(String clientId){
-        return cd.findById(clientId);
+    public Client getById(String clientId){
+        return cd.getById(clientId);
     }
 
     public List<Client> findAll(){
