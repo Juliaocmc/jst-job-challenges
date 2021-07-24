@@ -20,7 +20,7 @@ public class ClientRepositoryTest extends BaseServiceTest{
         client.setEmail("user");
         client.setName("user");
         client.setPassword("user");
-        client.setUsername("user");
+        client.setLogin("user");
         cs.save(client);
 
         Assert.assertNotNull(client);

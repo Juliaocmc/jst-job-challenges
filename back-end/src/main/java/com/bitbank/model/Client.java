@@ -1,11 +1,16 @@
 package com.bitbank.model;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -58,8 +63,18 @@ public class Client implements UserDetails {
     @NotNull(message = "Password cannot be null")
     private String password;
 
-
+    @NotNull
     private boolean admin;
+
+    @OneToMany
+    @JoinTable(name = "client_bank_rel", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
+               inverseJoinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"))
+    private List<Bank> bank;
+
+    @OneToMany
+    @JoinTable(name = "client_account", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
+               inverseJoinColumns = @JoinColumn(name = "ACCOUNT__ID", referencedColumnName = "ID"))
+    private List<Account> account;
 
     @Override
     public boolean equals(Object obj) {

@@ -1,14 +1,12 @@
 package com.bitbank.controller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.bitbank.dto.ClientDto;
-import com.bitbank.dto.ClientTestizinho;
 import com.bitbank.model.Client;
 import com.bitbank.server.ClientService;
 
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,7 +62,7 @@ public class ClientController {
     @DeleteMapping("/{clientId}")
     public ResponseEntity<String> delete(@PathVariable String clientId) {
         cs.delete(clientId);
-        return ResponseEntity.ok("Ok");
+        return ResponseEntity.ok("client successfully deleted!");
         
     }
 
