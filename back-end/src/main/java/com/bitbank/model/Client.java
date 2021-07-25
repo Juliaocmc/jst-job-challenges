@@ -72,7 +72,7 @@ public class Client implements UserDetails {
     private List<Bank> bank;
 
     @OneToMany
-    @JoinTable(name = "client_account", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
+    @JoinTable(name = "client_account_rel", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
                inverseJoinColumns = @JoinColumn(name = "ACCOUNT__ID", referencedColumnName = "ID"))
     private List<Account> account;
 

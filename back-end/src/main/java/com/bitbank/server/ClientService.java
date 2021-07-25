@@ -3,7 +3,6 @@ package com.bitbank.server;
 import com.bitbank.model.Client;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.bitbank.dao.ClientDao;
 
@@ -16,7 +15,7 @@ public class ClientService {
     @Autowired
     ClientDao cd;
     
-    public void save(Client client) throws Exception{
+    public void save(Client client){
         cd.save(client);
     }
 

@@ -47,7 +47,7 @@ public class AccountController {
     }
 
     @PostMapping("")
-    public @ResponseBody ResponseEntity<Account> save(@RequestBody AccountDto accountDto) throws Exception {
+    public @ResponseBody ResponseEntity<Account> save(@RequestBody AccountDto accountDto){
         var account = modelMapper.map(accountDto, Account.class);
         as.save(account);
         return ResponseEntity.ok(account);
@@ -57,12 +57,12 @@ public class AccountController {
     @DeleteMapping("/{accountId}")
     public ResponseEntity<String> delete(@PathVariable String accountId) {
         as.delete(accountId);
-        return ResponseEntity.ok("account successfully deleted!");
+        return ResponseEntity.ok("Account successfully deleted!");
 
     }
 
-    private AccountDto toDto(Account client) {
-        return modelMapper.map(client, AccountDto.class);
+    private AccountDto toDto(Account account) {
+        return modelMapper.map(account, AccountDto.class);
     }
 
 }

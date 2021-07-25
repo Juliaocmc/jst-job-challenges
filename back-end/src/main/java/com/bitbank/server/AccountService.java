@@ -15,8 +15,8 @@ public class AccountService {
     @Autowired
     AccountDao ad;
     
-    public void save(Account client){
-        ad.save(client);
+    public void save(Account account){
+        ad.save(account);
     }
 
     public Account getById(String account){
