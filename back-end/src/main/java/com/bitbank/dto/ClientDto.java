@@ -2,7 +2,6 @@ package com.bitbank.dto;
 
 import java.util.List;
 
-import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 
 import lombok.Getter;
@@ -19,5 +18,4 @@ public class ClientDto {
     public String email;
     public String password;
     public List<Bank> listBank;
-    public List<Account> listAccounts;
 }
