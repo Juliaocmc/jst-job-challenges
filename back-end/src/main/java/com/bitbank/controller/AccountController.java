@@ -8,9 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.bitbank.dto.AccountDto;
+import com.bitbank.dto.CoinDto;
 import com.bitbank.model.Account;
 import com.bitbank.model.Coin;
 import com.bitbank.server.AccountService;
+import com.bitbank.server.ClientService;
 import com.bitbank.server.CoinService;
 
 import org.modelmapper.ModelMapper;
@@ -40,41 +42,62 @@ public class AccountController {
     public CoinService coinService;
 
     @Autowired
-    public AccountService as;
+    public ClientService clientService;
+
+    @Autowired
+    public AccountService accountService;
 
     @GetMapping("")
     public ResponseEntity<List<AccountDto>> findAll() {
-        return ResponseEntity.ok(as.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        return ResponseEntity.ok(accountService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<AccountDto> getUserById(@PathVariable String accountId) {
-        var account = as.getById(accountId);
+    public ResponseEntity<AccountDto> getAccountById(@PathVariable String accountId) {
+        var account = accountService.getById(accountId);
         return ResponseEntity.ok(toDto(account));
     }
 
-    @PutMapping("/{accountId}/coin/{coinId}")
-    public @ResponseBody  ResponseEntity<String> addCoin(@PathVariable("accountId") String accountId,@PathVariable("coinId") String coinId ) {
-        var account = as.getById(accountId);
-        var coin = coinService.getById(coinId);
-        List<Coin> coinsList = new ArrayList<>();
-        coinsList.add(coin);
-        account.setCoinList(coinsList);
-        as.save(account);
-        return ResponseEntity.ok("deposito realizado com sucesso");
+    // @PutMapping("/{accountId}/coin/{coinId}")
+    // public @ResponseBody  ResponseEntity<String> addCoin(@PathVariable("accountId") String accountId,@PathVariable("coinId") String coinId ) {
+    //     var account = accountService.getById(accountId);
+    //     var coin = coinService.getById(coinId);
+    //     List<Coin> coinsList = new ArrayList<>();
+    //     coinsList.add(coin);
+    //     account.setCoinList(coinsList);
+    //     accountService.save(account);
+    //     return ResponseEntity.ok("deposito realizado com sucesso");
+    // }
+
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<AccountDto>> getAccountByClient(@PathVariable("clientId") String clientId ){        
+        return ResponseEntity.ok(accountService.getAccountByClient(clientId).stream().map(this::toDto).collect(Collectors.toList()));
+    }
+
+    @PostMapping("/{accountId}/client/{clientId}")
+    public @ResponseBody ResponseEntity<String> depositCoins(@PathVariable("clientId") String clientId, 
+    @PathVariable("accountId") String accountId, @RequestBody CoinDto coinDto ){   
+        if(accountService.clientHasAccount(clientId, accountId)){
+            var coin = modelMapper.map(coinDto, Coin.class);
+            accountService.depositCoins(coin, accountId);
+            return ResponseEntity.ok("deposit made successfully!:"+coin.getCoinName()+" Amount :" +coin.getAmountCoins()+" ");
+        }
+
+        return ResponseEntity.ok("Cliente não tem conta");
+        
     }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Account> save(@RequestBody AccountDto accountDto){
         var account = modelMapper.map(accountDto, Account.class);
-        as.save(account);
+        accountService.save(account);
         return ResponseEntity.ok(account);
 
     }
 
     @DeleteMapping("/{accountId}")
     public ResponseEntity<String> delete(@PathVariable String accountId) {
-        as.delete(accountId);
+        accountService.delete(accountId);
         return ResponseEntity.ok("Account successfully deleted!");
 
     }

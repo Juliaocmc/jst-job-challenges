@@ -36,4 +36,8 @@ public class CoinService {
     public void delete(String coinId){
         coinDao.deleteById(coinId);
     }
+
+    public Coin getCoinByNameAndAccount(String coinId, String accountId){
+        return coinDao.getCoinByNameAndAccount(coinId, accountId);
+    }
 }

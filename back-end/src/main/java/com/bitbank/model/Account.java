@@ -3,6 +3,7 @@ package com.bitbank.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,5 +50,5 @@ public class Account implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "COIN_ID", referencedColumnName = "ID"))   
     private List<Coin> coinList;
 
-       
+    
 }

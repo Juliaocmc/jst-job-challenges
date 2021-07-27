@@ -1,29 +1,26 @@
 package com.bitbank.repository;
 
+import com.bitbank.dao.AccountDao;
 import com.bitbank.model.Client;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
 public class ClientRepositoryTest extends BaseServiceTest{
 
+    @Autowired
+    AccountDao accountDao;
+
     
     @Test
     public void test1(){
         try {
-            
-        Client client = new Client();
-        client.setAdmin(true);
-        client.setCpf(11111111111L);
-        client.setEmail("user");
-        client.setName("user");
-        client.setPassword("user");
-        client.setLogin("user");
-        cs.save(client);
+        accountDao.getAccountNumber();
 
-        Assert.assertNotNull(client);
+        Assert.assertEquals(1, 1);
         
     } catch (Exception e) {
         Assert.fail(e.getMessage());
@@ -31,4 +28,5 @@ public class ClientRepositoryTest extends BaseServiceTest{
     }
 
     }
+    
 }

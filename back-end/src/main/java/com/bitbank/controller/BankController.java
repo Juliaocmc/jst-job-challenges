@@ -12,6 +12,7 @@ import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 import com.bitbank.server.AccountService;
 import com.bitbank.server.BankService;
+import com.bitbank.server.ClientService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,45 +38,46 @@ public class BankController {
     public ModelMapper modelMapper;
 
     @Autowired
-    public BankService bs;
+    public BankService bankService;
 
     @Autowired
-    public AccountService as;
+    public ClientService clientService;
+
+    @Autowired
+    public AccountService accountService;
 
     @GetMapping("")
     public ResponseEntity<List<BankDto>> findAll() {
-        return ResponseEntity.ok(bs.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        return ResponseEntity.ok(bankService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
     }
 
     @GetMapping("/{bankId}")
     public ResponseEntity<BankDto> getUserById(@PathVariable String bankId) {
-        var bank = bs.getById(bankId);
+        var bank = bankService.getById(bankId);
         return ResponseEntity.ok(toDto(bank));
     }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Bank> save(@RequestBody BankDto bankDto){
         var bank = modelMapper.map(bankDto, Bank.class);
-        bs.save(bank);
+        bankService.save(bank);
         return ResponseEntity.ok(bank);
 
     }
 
-    @PutMapping("/{bankId}/{accountId}")
-    public @ResponseBody ResponseEntity<String> addAccount(@PathVariable("bankId") String bankId,@PathVariable("accountId") String accountId){
-        var bank = bs.getById(bankId);
-        var account = as.getById(accountId);
-        List<Account> listAccount = new ArrayList<>();
-        listAccount.add(account);
-        bank.setAccount(listAccount);
-        bs.save(bank);
-        return ResponseEntity.ok("account successfully registered with the bank");
+    @PutMapping("/{bankId}/client/{clientId}")
+    public @ResponseBody ResponseEntity<String> addAccount(@PathVariable("bankId") String bankId,@PathVariable("clientId") String clientId){
+        var bank = bankService.getById(bankId);
+        var client = clientService.getById(clientId);
+        var account = bankService.linkClientToAccount(bank, client);  
+        return ResponseEntity.ok("Account Nº " +account.getNumber()+" successfully registered with the Bank " +bank.getName()+ 
+                                " Agency Nº" +bank.getAgency()+ " in the name of " +client.getName() );
 
     }
 
     @DeleteMapping("/{bankId}")
     public ResponseEntity<String> delete(@PathVariable String bankId) {
-        bs.delete(bankId);
+        bankService.delete(bankId);
         return ResponseEntity.ok("Back successfully deleted!");
 
     }
