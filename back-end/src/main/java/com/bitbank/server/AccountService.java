@@ -1,7 +1,6 @@
 package com.bitbank.server;
 
 import com.bitbank.model.Account;
-import com.bitbank.model.Client;
 import com.bitbank.model.Coin;
 
 import java.util.ArrayList;

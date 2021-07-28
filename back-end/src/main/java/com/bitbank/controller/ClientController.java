@@ -82,16 +82,16 @@ public class ClientController {
         return ResponseEntity.ok("Client account successfully registered");
     }
 
-    @PutMapping("/{clientId}/bank/{bankId}")
-    public @ResponseBody ResponseEntity<String> addBank(@PathVariable("clientId") String clientId, @PathVariable("bankId") String bankId){
-        var client = cs.getById(clientId);
-        var bank = bs.getById(bankId);
-        List<Bank> bankList = new ArrayList<>();
-        bankList.add(bank);
-        client.setBank(bankList);
-        cs.save(client);
-        return ResponseEntity.ok("Client bank successfully registered");
-    }
+    // @PutMapping("/{clientId}/bank/{bankId}")
+    // public @ResponseBody ResponseEntity<String> addBank(@PathVariable("clientId") String clientId, @PathVariable("bankId") String bankId){
+    //     var client = cs.getById(clientId);
+    //     var bank = bs.getById(bankId);
+    //     List<Bank> bankList = new ArrayList<>();
+    //     bankList.add(bank);
+    //     client.setBank(bankList);
+    //     cs.save(client);
+    //     return ResponseEntity.ok("Client bank successfully registered");
+    // }
 
     @DeleteMapping("/{clientId}")
     public ResponseEntity<String> delete(@PathVariable String clientId) {
