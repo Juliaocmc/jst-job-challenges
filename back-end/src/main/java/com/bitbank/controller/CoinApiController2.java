@@ -11,6 +11,7 @@ import java.net.URL;
 import com.bitbank.model.CoinApi;
 import com.bitbank.model.Data;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -25,15 +26,14 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
-@RequestMapping(path = "/coinapi")
+@RequestMapping(path = "/coinapi2")
 @RestController
-public class CoinApiController {
+public class CoinApiController2 {
     
     @GetMapping(value = "")
-    public void getCoins() throws IOException {
+    public CoinApi getCoins() throws IOException {
         
-    // RestTemplate template = new RestTemplate();
-    URL url = new URL("https://api.coincap.io/v2/assets/bitcoin");
+    URL url = new URL("https://api.coincap.io/v2/assets/vechain");
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
     con.setRequestProperty("Content-Type", "application/json");
@@ -49,46 +49,23 @@ public class CoinApiController {
     in.close();
     con.disconnect();
 
+    // JsonParser parser = new JsonParser();
+    // JsonObject rootObj = parser.parse(content.toString()).getAsJsonObject();
+    // JsonArray locObj = rootObj.getAsJsonArray("data");
+    
+
+    // Gson gson = new Gson();
+    // CoinApi[] coinApi = gson.fromJson(locObj, CoinApi[].class);
+    // return coinApi;
+
     JsonParser parser = new JsonParser();
     JsonObject rootObj = parser.parse(content.toString()).getAsJsonObject();
     JsonObject locObj = rootObj.getAsJsonObject("data");
-    // .getAsJsonObject("name");
-    // var result = template.getForEntity(in.toString(), Data.class);
+    
 
-
-    System.out.println(locObj.get("name"));
-    System.out.println(locObj.get("priceUsd"));
     Gson gson = new Gson();
     CoinApi coinApi = gson.fromJson(locObj, CoinApi.class);
-    System.out.println(coinApi.getName());
+    return coinApi;
 
-    
-    // RestTemplate template2 = new RestTemplateBuilder().rootUri("https://api.coincap.io/v2/assets").defaultHeader("Accept-Encoding", "gzip")
-    // .defaultHeader("Content-Type", "application/json").build();
-    // Gson gson2 = new Gson();
-    // Data coinApi2 = gson.fromJson(template2.toString(), Data.class);
-    // System.out.println(coinApi2.getData().getName());
-    // RestTemplate template2 = new RestTemplate();
-    // // https://api.coincap.io/v2/assets/bitcoin
-    // UriComponents uri = UriComponentsBuilder.newInstance()
-    // .scheme("https")
-    // .host("api.coincap.io")
-    // .path("v2/assets")
-    // .queryParam("id", "bitcoin")
-    // .
-    // .build();
-    // Gson gson2 = new Gson();
-    // Data coinApi2 = gson2.fromJson(uri.toUriString(), Data.class);
-    // System.out.println(coinApi2.getData().getName());
-
-   
-
-    //'Content-Type' : 'application/json; charset=utf-8'   
-    
-    // We encourage clients to use compression via the Accept-Encoding header.
-
-    // Accept-Encoding: gzip or Accept-Encoding: deflate
-    
-    // System.out.println(result);
     }
 }
