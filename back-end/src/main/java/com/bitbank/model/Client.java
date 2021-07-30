@@ -69,7 +69,7 @@ public class Client implements UserDetails {
 
     @OneToMany
     @JoinTable(name = "client_account_rel", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
-               inverseJoinColumns = @JoinColumn(name = "ACCOUNT__ID", referencedColumnName = "ID"))
+               inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID"))
     private List<Account> account;
 
     @Override

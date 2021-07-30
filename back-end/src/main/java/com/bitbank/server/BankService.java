@@ -60,4 +60,8 @@ public class BankService {
         return account;   
         
     }
+
+    public List<Bank> getListBankByClient(String clientId){
+        return bankDao.getListBankByClient(clientId);
+    }
 }

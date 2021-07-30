@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.bitbank.dto.BankDto;
 import com.bitbank.dto.ClientDto;
+import com.bitbank.dto.ClientResumeDto;
 import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 import com.bitbank.model.Client;
@@ -51,14 +53,19 @@ public class ClientController {
     public ClientService cs;
 
     @GetMapping("")
-    public ResponseEntity<List<ClientDto>> findAll() {
-        return ResponseEntity.ok(cs.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+    public ResponseEntity<List<ClientResumeDto>> findAll() {
+        return ResponseEntity.ok(cs.findAll().stream().map(this::resume).collect(Collectors.toList()));
     }
     
     @GetMapping("/{clientId}")
-    public ResponseEntity<ClientDto> getUserById(@PathVariable String clientId) {   
+    public ClientDto getUserById(@PathVariable String clientId) {   
         var client = cs.getById(clientId);
-        return ResponseEntity.ok(toDto(client));
+        var bank = bs.getListBankByClient(clientId);
+        var bankDto =  bank.stream().map(BankDto::new).collect(Collectors.toList());
+        var clientDto = toDto(client);
+        clientDto.setListBank(bankDto);
+
+        return clientDto;
     }
 
     @PostMapping("")
@@ -105,5 +112,18 @@ public class ClientController {
         return modelMapper.map(client, ClientDto.class);
     }
 
+    private ClientResumeDto resume(Client client){
+        return modelMapper.map(client, ClientResumeDto.class);
+    }
+
+    public static List<BankDto> bankConvert(List<Bank> bank) {
+        return bank.stream().map(BankDto::new).collect(Collectors.toList());
+    }
+    
+    public static List<BankDto> converter(List<Bank> bank) {
+        return bank.stream().map(banks -> {
+                return new BankDto(banks);
+            }).collect(Collectors.toList());
+    }
    
 }
