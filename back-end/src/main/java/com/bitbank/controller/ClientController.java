@@ -64,7 +64,7 @@ public class ClientController {
     // public ClientDto getUserById(@PathVariable String clientId) {   
     //     var client = cs.getById(clientId);
     //     var bank = bs.getListBankByClient(clientId);
-    //     var bankDto =  bank.stream().map(BankDto::new).collect(Collectors.toList());
+    //     var bankDto =  bankConvert(bank);
     //     var clientDto = toDto(client);
     //     clientDto.setListBank(bankDto);
 
@@ -116,8 +116,8 @@ public class ClientController {
         return modelMapper.map(client, ClientResumeDto.class);
     }
 
-    // public static List<BankDto> bankConvert(List<Bank> bank) {
-    //     return bank.stream().map(BankDto::new).collect(Collectors.toList());
+    // private  BankDto bankConvert(List<Bank> bank) {
+    //     return modelMapper.map(bank, BankDto.class);
     // }
     
     // public static List<BankDto> converter(List<Bank> bank) {
