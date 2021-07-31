@@ -1,5 +1,6 @@
 package com.bitbank.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.bitbank.dto.BankBalanceDto;
 import com.bitbank.dto.BankDto;
 import com.bitbank.dto.ClientDto;
 import com.bitbank.dto.ClientResumeDto;
@@ -57,16 +59,17 @@ public class ClientController {
         return ResponseEntity.ok(cs.findAll().stream().map(this::resume).collect(Collectors.toList()));
     }
     
-    @GetMapping("/{clientId}")
-    public ClientDto getUserById(@PathVariable String clientId) {   
-        var client = cs.getById(clientId);
-        var bank = bs.getListBankByClient(clientId);
-        var bankDto =  bank.stream().map(BankDto::new).collect(Collectors.toList());
-        var clientDto = toDto(client);
-        clientDto.setListBank(bankDto);
+    //TODO VERIFICAR COMO FAZER A CONVERSÂO DE DTO
+    // @GetMapping("/{clientId}")   
+    // public ClientDto getUserById(@PathVariable String clientId) {   
+    //     var client = cs.getById(clientId);
+    //     var bank = bs.getListBankByClient(clientId);
+    //     var bankDto =  bank.stream().map(BankDto::new).collect(Collectors.toList());
+    //     var clientDto = toDto(client);
+    //     clientDto.setListBank(bankDto);
 
-        return clientDto;
-    }
+    //     return clientDto;
+    // }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody ClientDto clientDto){
@@ -89,16 +92,13 @@ public class ClientController {
         return ResponseEntity.ok("Client account successfully registered");
     }
 
-    // @PutMapping("/{clientId}/bank/{bankId}")
-    // public @ResponseBody ResponseEntity<String> addBank(@PathVariable("clientId") String clientId, @PathVariable("bankId") String bankId){
-    //     var client = cs.getById(clientId);
-    //     var bank = bs.getById(bankId);
-    //     List<Bank> bankList = new ArrayList<>();
-    //     bankList.add(bank);
-    //     client.setBank(bankList);
-    //     cs.save(client);
-    //     return ResponseEntity.ok("Client bank successfully registered");
-    // }
+    @GetMapping("/{clientId}/account/{accountId}")
+    public @ResponseBody ResponseEntity<BankBalanceDto> getBankBalanceByAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId) throws IOException{
+        var client = cs.getById(clientId);
+        var account = as.getById(accountId);
+        var bankBalance = as.getBankBalanceByAccount(client, account);
+        return ResponseEntity.ok(bankBalance);
+    }
 
     @DeleteMapping("/{clientId}")
     public ResponseEntity<String> delete(@PathVariable String clientId) {
@@ -116,14 +116,14 @@ public class ClientController {
         return modelMapper.map(client, ClientResumeDto.class);
     }
 
-    public static List<BankDto> bankConvert(List<Bank> bank) {
-        return bank.stream().map(BankDto::new).collect(Collectors.toList());
-    }
+    // public static List<BankDto> bankConvert(List<Bank> bank) {
+    //     return bank.stream().map(BankDto::new).collect(Collectors.toList());
+    // }
     
-    public static List<BankDto> converter(List<Bank> bank) {
-        return bank.stream().map(banks -> {
-                return new BankDto(banks);
-            }).collect(Collectors.toList());
-    }
+    // public static List<BankDto> converter(List<Bank> bank) {
+    //     return bank.stream().map(banks -> {
+    //             return new BankDto(banks);
+    //         }).collect(Collectors.toList());
+    // }
    
 }

@@ -12,6 +12,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class CoinApiService {
     public CoinApi[] findAllCoinsApi() throws IOException {
         URL url = new URL("https://api.coincap.io/v2/assets");

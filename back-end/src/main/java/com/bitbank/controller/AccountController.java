@@ -58,17 +58,6 @@ public class AccountController {
         return ResponseEntity.ok(toDto(account));
     }
 
-    // @PutMapping("/{accountId}/coin/{coinId}")
-    // public @ResponseBody  ResponseEntity<String> addCoin(@PathVariable("accountId") String accountId,@PathVariable("coinId") String coinId ) {
-    //     var account = accountService.getById(accountId);
-    //     var coin = coinService.getById(coinId);
-    //     List<Coin> coinsList = new ArrayList<>();
-    //     coinsList.add(coin);
-    //     account.setCoinList(coinsList);
-    //     accountService.save(account);
-    //     return ResponseEntity.ok("deposito realizado com sucesso");
-    // }
-
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<AccountDto>> getAccountByClient(@PathVariable("clientId") String clientId ){        
         return ResponseEntity.ok(accountService.getAccountByClient(clientId).stream().map(this::toDto).collect(Collectors.toList()));

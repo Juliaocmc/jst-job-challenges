@@ -14,4 +14,6 @@ public interface CoinDao extends JpaRepository<Coin, String> {
     "and id = (SELECT coin_id FROM account_coin where account_id = :accountId)", nativeQuery = true)
     Coin getCoinByNameAndAccount(String coinName, String accountId);
 
+    @Query(value="SELECT * FROM coin c where c.id = (select coin_id from account_coin ac where ac.account_id = :accountId)", nativeQuery = true)
+    Coin getBankBalanceByAccount(String accountId);
 }

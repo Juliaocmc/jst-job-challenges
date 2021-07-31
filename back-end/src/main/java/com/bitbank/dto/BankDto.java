@@ -21,15 +21,5 @@ public class BankDto {
     public List<Account> account;
 
     
-
-    public BankDto(Bank bank) {
-        this.id = bank.getId();
-        this.name = bank.getName();
-        this.agency = bank.getAgency();
-        this.account = bank.getAccount();
-    }
-    
-
-
    
 }
