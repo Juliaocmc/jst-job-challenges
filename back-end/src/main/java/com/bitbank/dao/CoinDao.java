@@ -1,6 +1,5 @@
 package com.bitbank.dao;
 
-
 import com.bitbank.model.Coin;
 
 import org.springframework.data.jpa.repository.JpaRepository;

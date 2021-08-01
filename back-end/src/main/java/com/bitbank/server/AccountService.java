@@ -80,14 +80,12 @@ public class AccountService {
         var coinRecovered = coinService.getCoinByNameAndAccount(coin.getCoinName(), accountId);        
         if(coinRecovered == null){
             var account = accountDao.getById(accountId);
-            List<Coin> coinsList = new ArrayList<>();
             coinService.save(coin);
-            coinsList.add(coin);
-            account.setCoinList(coinsList);
+            account.setCoin(coin);
             save(account);
         } else{
             coinRecovered.setAmountCoins(coinRecovered.getAmountCoins() + coin.getAmountCoins());
-            coinService.save(coin);
+            coinService.save(coinRecovered);
         }
     }
 
@@ -97,6 +95,7 @@ public class AccountService {
         var bankBalance = new BankBalanceDto();
         bankBalance.setClientName(client.getName());
         bankBalance.setAccountNumber(account.getNumber());
+        bankBalance.setAmountCoins(coins.getAmountCoins());
         bankBalance.setCoinName(coins.getCoinName());
         var price = Double.parseDouble(coinApi.getPriceUsd());
         bankBalance.setBankBalance(price * coins.getAmountCoins());

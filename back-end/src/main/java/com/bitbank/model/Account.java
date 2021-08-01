@@ -48,7 +48,7 @@ public class Account implements Serializable {
     @OneToMany
     @JoinTable(name = "account_coin", joinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID"), 
                inverseJoinColumns = @JoinColumn(name = "COIN_ID", referencedColumnName = "ID"))   
-    private List<Coin> coinList;
+    private Coin coin;
 
     
 }

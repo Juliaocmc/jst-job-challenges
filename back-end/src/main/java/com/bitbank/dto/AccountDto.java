@@ -13,6 +13,6 @@ public class AccountDto {
 
     public String id;
     public Long number;
-    public List<Coin> coinList;
+    public Coin coin;
 
 }

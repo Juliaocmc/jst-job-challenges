@@ -85,10 +85,8 @@ public class ClientController {
     @PutMapping("/{clientId}/account/{accountId}")
     public @ResponseBody ResponseEntity<String> addAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId){
         var client = cs.getById(clientId);
-        var account = as.getById(accountId);
-        List<Account> accountList = new ArrayList<>();
-        accountList.add(account);
-        client.setAccount(accountList);
+        var account = as.getById(accountId);        
+        client.getAccount().add(account);
         cs.save(client);
         return ResponseEntity.ok("Client account successfully registered");
     }
