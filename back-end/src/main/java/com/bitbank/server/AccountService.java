@@ -81,7 +81,7 @@ public class AccountService {
         if(coinRecovered == null){
             var account = accountDao.getById(accountId);
             coinService.save(coin);
-            account.setCoin(coin);
+            account.getCoinList().add(coin);
             save(account);
         } else{
             coinRecovered.setAmountCoins(coinRecovered.getAmountCoins() + coin.getAmountCoins());
