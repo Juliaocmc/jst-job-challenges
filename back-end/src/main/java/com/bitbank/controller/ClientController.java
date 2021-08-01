@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 
 import com.bitbank.dto.BankBalanceDto;
 import com.bitbank.dto.BankDto;
+import com.bitbank.dto.BankListDto;
 import com.bitbank.dto.ClientDto;
 import com.bitbank.dto.ClientResumeDto;
 import com.bitbank.model.Account;
@@ -59,17 +60,17 @@ public class ClientController {
         return ResponseEntity.ok(cs.findAll().stream().map(this::resume).collect(Collectors.toList()));
     }
     
-    //TODO VERIFICAR COMO FAZER A CONVERSÂO DE DTO
-    // @GetMapping("/{clientId}")   
-    // public ClientDto getUserById(@PathVariable String clientId) {   
-    //     var client = cs.getById(clientId);
-    //     var bank = bs.getListBankByClient(clientId);
-    //     var bankDto =  bankConvert(bank);
-    //     var clientDto = toDto(client);
-    //     clientDto.setListBank(bankDto);
+    // TODO VERIFICAR COMO FAZER A CONVERSÂO DE DTO
+    @GetMapping("/{clientId}")   
+    public ClientDto getUserById(@PathVariable String clientId) {   
+        var client = cs.getById(clientId);
+        var bank = bs.getListBankByClient(clientId);
+        var bankDto =  converterListBank(bank);
+        var clientDto = toDto(client);
+        clientDto.setListBank(bankDto);
 
-    //     return clientDto;
-    // }
+        return clientDto;
+    }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody ClientDto clientDto){
@@ -115,15 +116,11 @@ public class ClientController {
     private ClientResumeDto resume(Client client){
         return modelMapper.map(client, ClientResumeDto.class);
     }
-
-    // private  BankDto bankConvert(List<Bank> bank) {
-    //     return modelMapper.map(bank, BankDto.class);
-    // }
     
-    // public static List<BankDto> converter(List<Bank> bank) {
-    //     return bank.stream().map(banks -> {
-    //             return new BankDto(banks);
-    //         }).collect(Collectors.toList());
-    // }
+    public static List<BankListDto> converterListBank(List<Bank> bank) {
+        return bank.stream().map(banks -> {
+                return new BankListDto(banks);
+            }).collect(Collectors.toList());
+    }
    
 }

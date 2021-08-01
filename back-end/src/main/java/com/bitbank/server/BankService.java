@@ -47,14 +47,10 @@ public class BankService {
     }
 
     public Account linkClientToAccount(Bank bank, Client client){
-        List<Client> listClients = new ArrayList<>();
-        listClients.add(client);
-        bank.setClient(listClients); 
-        var account = accountService.createAccount();
-        List<Account> listAccount = new ArrayList<>();
-        listAccount.add(account);
-        bank.setAccount(listAccount);
-        client.setAccount(listAccount);
+        bank.getClient().add(client);
+        var account = accountService.createAccount();        
+        bank.getAccount().add(account);
+        client.getAccount().add(account);
         bankDao.save(bank);     
         clientDao.save(client);
         return account;   
