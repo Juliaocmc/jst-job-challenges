@@ -101,4 +101,5 @@ public class AccountService {
         bankBalance.setBankBalance(price * coins.getAmountCoins());
         return bankBalance;
     }
+    //S
 }
