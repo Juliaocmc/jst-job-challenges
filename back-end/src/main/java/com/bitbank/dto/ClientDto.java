@@ -1,7 +1,5 @@
 package com.bitbank.dto;
 
-import java.util.List;
-
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +16,7 @@ public class ClientDto {
     public Long cpf;
     public String email;
     public String password;
-    public List<BankListDto> listBank;
+    public BankDto listBank;
 
     
     

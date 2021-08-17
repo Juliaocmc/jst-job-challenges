@@ -1,8 +1,5 @@
 package com.bitbank.dto;
 
-import java.util.List;
-
-import com.bitbank.model.Bank;
 
 import lombok.Getter;
 import lombok.Setter;

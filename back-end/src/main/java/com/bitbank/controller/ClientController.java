@@ -13,6 +13,7 @@ import com.bitbank.dto.BankDto;
 import com.bitbank.dto.BankListDto;
 import com.bitbank.dto.ClientDto;
 import com.bitbank.dto.ClientResumeDto;
+import com.bitbank.mapper.BankMapper;
 import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 import com.bitbank.model.Client;
@@ -20,6 +21,7 @@ import com.bitbank.server.AccountService;
 import com.bitbank.server.BankService;
 import com.bitbank.server.ClientService;
 
+import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +57,9 @@ public class ClientController {
     @Autowired
     public ClientService cs;
 
+    @Autowired
+    public BankMapper bankMapper;
+
     @GetMapping("")
     public ResponseEntity<List<ClientResumeDto>> findAll() {
         return ResponseEntity.ok(cs.findAll().stream().map(this::resume).collect(Collectors.toList()));
@@ -65,7 +70,7 @@ public class ClientController {
     public ClientDto getUserById(@PathVariable String clientId) {   
         var client = cs.getById(clientId);
         var bank = bs.getListBankByClient(clientId);
-        var bankDto =  converterListBank(bank);
+        var bankDto =  bankMapper.mapperListBankDtoForPojo(bank);
         var clientDto = toDto(client);
         clientDto.setListBank(bankDto);
 
@@ -82,14 +87,14 @@ public class ClientController {
         
     }
 
-    @PutMapping("/{clientId}/account/{accountId}")
-    public @ResponseBody ResponseEntity<String> addAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId){
-        var client = cs.getById(clientId);
-        var account = as.getById(accountId);        
-        client.getAccount().add(account);
-        cs.save(client);
-        return ResponseEntity.ok("Client account successfully registered");
-    }
+   // @PutMapping("/{clientId}/account/{accountId}")
+  //  public @ResponseBody ResponseEntity<String> addAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId){
+   //     var client = cs.getById(clientId);
+    //    var account = as.getById(accountId);        
+   //     client.getAccount().add(account);
+  //      cs.save(client);
+   //     return ResponseEntity.ok("Client account successfully registered");
+    //}
 
     @GetMapping("/{clientId}/account/{accountId}")
     public @ResponseBody ResponseEntity<BankBalanceDto> getBankBalanceByAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId) throws IOException{
@@ -115,10 +120,15 @@ public class ClientController {
         return modelMapper.map(client, ClientResumeDto.class);
     }
     
-    public static List<BankListDto> converterListBank(List<Bank> bank) {
-        return bank.stream().map(banks -> {
-                return new BankListDto(banks);
-            }).collect(Collectors.toList());
-    }
-   
-}
+    //public static List<BankListDto> converterListBank(List<Bank> bank) {
+     //   return bank.stream().map(banks -> {
+     //           return new BankListDto(banks);
+      //      }).collect(Collectors.toList());
+//}
+
+
+
+
+
+  
+     }

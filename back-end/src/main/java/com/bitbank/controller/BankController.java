@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.bitbank.dto.BankDto;
+import com.bitbank.mapper.BankMapper;
 import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 import com.bitbank.server.AccountService;
@@ -35,7 +36,7 @@ public class BankController {
     private EntityManager em;
 
     @Autowired
-    public ModelMapper modelMapper;
+    public BankMapper bankMapper;
 
     @Autowired
     public BankService bankService;
@@ -48,18 +49,19 @@ public class BankController {
 
     @GetMapping("")
     public ResponseEntity<List<BankDto>> findAll() {
-        return ResponseEntity.ok(bankService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        List<Bank> bankList = bankService.findAll();
+        return ResponseEntity.ok(bankMapper.mapperListBankDtoForPojo(bankList));
     }
 
     @GetMapping("/{bankId}")
     public ResponseEntity<BankDto> getUserById(@PathVariable String bankId) {
         var bank = bankService.getById(bankId);
-        return ResponseEntity.ok(toDto(bank));
+        return ResponseEntity.ok(bankMapper.toDto(bank));
     }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Bank> save(@RequestBody BankDto bankDto){
-        var bank = modelMapper.map(bankDto, Bank.class);
+        var bank = bankMapper.toPojo(bankDto);
         bankService.save(bank);
         return ResponseEntity.ok(bank);
 
@@ -82,8 +84,6 @@ public class BankController {
 
     }
 
-    private BankDto toDto(Bank bank) {
-        return modelMapper.map(bank, BankDto.class);
-    }
+ 
 
 }

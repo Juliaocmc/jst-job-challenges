@@ -45,10 +45,6 @@ public class Bank implements Serializable {
     @OneToMany
     @JoinTable(name = "bank_account_rel", joinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"), 
                inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID"))   
-    private List<Account> account;
+    private List<Account> accountList;
 
-    @OneToMany
-    @JoinTable(name = "bank_client_rel", joinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"), 
-               inverseJoinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"))
-    private List<Client> client;
 }

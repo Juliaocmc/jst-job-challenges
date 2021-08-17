@@ -68,10 +68,11 @@ public class Client implements UserDetails {
    
 
     @OneToMany
-    @JoinTable(name = "client_account_rel", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
-               inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID"))
-    private List<Account> account;
+    @JoinTable(name = "client_bank_rel", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
+               inverseJoinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"))
+    private List<Bank> bankList;
 
+  
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
