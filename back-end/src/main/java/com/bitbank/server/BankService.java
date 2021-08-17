@@ -4,7 +4,6 @@ import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 import com.bitbank.model.Client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.bitbank.dao.BankDao;

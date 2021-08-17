@@ -8,9 +8,9 @@ import com.bitbank.model.Bank;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class BankMapper {
 
     @Autowired

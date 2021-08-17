@@ -1,6 +1,8 @@
 package com.bitbank.dto;
 
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +12,6 @@ public class AccountDto {
 
     public String id;
     public Long number;
-    public CoinDto coin;
+    public List<CoinDto> coinList;
 
 }

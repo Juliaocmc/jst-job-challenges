@@ -1,21 +1,17 @@
 package com.bitbank.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.bitbank.dto.BankDto;
 import com.bitbank.mapper.BankMapper;
-import com.bitbank.model.Account;
 import com.bitbank.model.Bank;
 import com.bitbank.server.AccountService;
 import com.bitbank.server.BankService;
 import com.bitbank.server.ClientService;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,7 +46,7 @@ public class BankController {
     @GetMapping("")
     public ResponseEntity<List<BankDto>> findAll() {
         List<Bank> bankList = bankService.findAll();
-        return ResponseEntity.ok(bankMapper.mapperListBankDtoForPojo(bankList));
+        return ResponseEntity.ok(bankMapper.toDtoList(bankList));
     }
 
     @GetMapping("/{bankId}")
@@ -61,7 +57,7 @@ public class BankController {
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Bank> save(@RequestBody BankDto bankDto){
-        var bank = bankMapper.toPojo(bankDto);
+        var bank = bankMapper.toModel(bankDto);
         bankService.save(bank);
         return ResponseEntity.ok(bank);
 

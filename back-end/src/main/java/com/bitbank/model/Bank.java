@@ -43,7 +43,7 @@ public class Bank implements Serializable {
     private Long agency;
 
     @OneToMany
-    @JoinTable(name = "bank_account_rel", joinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"), 
+    @JoinTable(name = "bank_account", joinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"), 
                inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID"))   
     private List<Account> accountList;
 

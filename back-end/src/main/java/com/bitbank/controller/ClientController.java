@@ -1,7 +1,6 @@
 package com.bitbank.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,19 +8,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.bitbank.dto.BankBalanceDto;
-import com.bitbank.dto.BankDto;
-import com.bitbank.dto.BankListDto;
 import com.bitbank.dto.ClientDto;
 import com.bitbank.dto.ClientResumeDto;
 import com.bitbank.mapper.BankMapper;
-import com.bitbank.model.Account;
-import com.bitbank.model.Bank;
+import com.bitbank.mapper.ClientMapper;
 import com.bitbank.model.Client;
 import com.bitbank.server.AccountService;
 import com.bitbank.server.BankService;
 import com.bitbank.server.ClientService;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +25,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,23 +52,20 @@ public class ClientController {
     public ClientService cs;
 
     @Autowired
+    ClientMapper clientMapper;
+
+    @Autowired
     public BankMapper bankMapper;
 
     @GetMapping("")
     public ResponseEntity<List<ClientResumeDto>> findAll() {
-        return ResponseEntity.ok(cs.findAll().stream().map(this::resume).collect(Collectors.toList()));
+        var clientList = cs.findAll();
+        return ResponseEntity.ok(clientMapper.toResumeDtoList(clientList));
     }
     
-    // TODO VERIFICAR COMO FAZER A CONVERSÂO DE DTO
     @GetMapping("/{clientId}")   
-    public ClientDto getUserById(@PathVariable String clientId) {   
-        var client = cs.getById(clientId);
-        var bank = bs.getListBankByClient(clientId);
-        var bankDto =  bankMapper.mapperListBankDtoForPojo(bank);
-        var clientDto = toDto(client);
-        clientDto.setListBank(bankDto);
-
-        return clientDto;
+    public ClientDto getUserById(@PathVariable String clientId) {         
+        return cs.relationshipBankClient(clientId);
     }
 
     @PostMapping("")
@@ -87,14 +78,6 @@ public class ClientController {
         
     }
 
-   // @PutMapping("/{clientId}/account/{accountId}")
-  //  public @ResponseBody ResponseEntity<String> addAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId){
-   //     var client = cs.getById(clientId);
-    //    var account = as.getById(accountId);        
-   //     client.getAccount().add(account);
-  //      cs.save(client);
-   //     return ResponseEntity.ok("Client account successfully registered");
-    //}
 
     @GetMapping("/{clientId}/account/{accountId}")
     public @ResponseBody ResponseEntity<BankBalanceDto> getBankBalanceByAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId) throws IOException{
@@ -112,21 +95,7 @@ public class ClientController {
     }
 
 
-    private ClientDto toDto(Client client){
-        return modelMapper.map(client, ClientDto.class);
-    }
-
-    private ClientResumeDto resume(Client client){
-        return modelMapper.map(client, ClientResumeDto.class);
-    }
-    
-    //public static List<BankListDto> converterListBank(List<Bank> bank) {
-     //   return bank.stream().map(banks -> {
-     //           return new BankListDto(banks);
-      //      }).collect(Collectors.toList());
-//}
-
-
+   
 
 
 

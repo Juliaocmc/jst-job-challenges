@@ -45,6 +45,11 @@ public class Account implements Serializable {
     @NotNull(message = "Number of account cannot be null")
     private Long number;
 
+
+    @Column(name = "CLIENT_ID")
+    @NotNull(message = "client of account cannot be null")
+    private String clientId;
+
     @OneToMany
     @JoinTable(name = "account_coin", joinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID"), 
                inverseJoinColumns = @JoinColumn(name = "COIN_ID", referencedColumnName = "ID"))   
