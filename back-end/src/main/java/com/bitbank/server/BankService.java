@@ -49,6 +49,7 @@ public class BankService {
         client.getBankList().add(bank);
         var account = accountService.createAccount();        
         bank.getAccountList().add(account);
+        account.setClientId(client.getId());
         bankDao.save(bank);     
         clientDao.save(client);
         return account;   

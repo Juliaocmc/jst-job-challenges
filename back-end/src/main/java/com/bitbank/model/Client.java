@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -67,7 +68,7 @@ public class Client implements UserDetails {
     private boolean admin;
    
 
-    @OneToMany
+    @ManyToMany()
     @JoinTable(name = "client_bank", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
                inverseJoinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"))
     private List<Bank> bankList;

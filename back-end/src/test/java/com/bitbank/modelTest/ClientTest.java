@@ -11,7 +11,7 @@ public class ClientTest extends BaseServiceTest{
 
     
     @Test
-    public void test1(){
+    public void criar_client(){
         try {
             var client = new Client();
             client.setAdmin(true);

@@ -24,6 +24,9 @@ public class AccountService {
     AccountDao accountDao;
 
     @Autowired
+    CoinExchangeService coinExchangeService;
+
+    @Autowired
     CoinService coinService;
 
     @Autowired
@@ -98,7 +101,8 @@ public class AccountService {
         bankBalance.setAmountCoins(coins.getAmountCoins());
         bankBalance.setCoinName(coins.getCoinName());
         var price = Double.parseDouble(coinApi.getPriceUsd());
-        bankBalance.setBankBalance(price * coins.getAmountCoins());
+        bankBalance.setUsd(price * coins.getAmountCoins());
+        bankBalance.setBrl(bankBalance.getUsd()/ Double.parseDouble(coinExchangeService.getBrlValue().getBrl()));
         return bankBalance;
     }
     
