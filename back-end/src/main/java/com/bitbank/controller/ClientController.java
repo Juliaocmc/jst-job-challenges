@@ -80,7 +80,7 @@ public class ClientController {
 
 
     @GetMapping("/{clientId}/account/{accountId}")
-    public @ResponseBody ResponseEntity<BankBalanceDto> getBankBalanceByAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId) throws IOException{
+    public @ResponseBody ResponseEntity<List<BankBalanceDto>> getBankBalanceByAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId) throws IOException{
         var client = cs.getById(clientId);
         var account = as.getById(accountId);
         var bankBalance = as.getBankBalanceByAccount(client, account);

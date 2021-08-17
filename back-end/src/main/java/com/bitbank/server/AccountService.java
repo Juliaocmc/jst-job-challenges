@@ -92,18 +92,22 @@ public class AccountService {
         }
     }
 
-    public BankBalanceDto getBankBalanceByAccount(Client client, Account account) throws IOException{
-        var coins = coinDao.getBankBalanceByAccount(account.getId());
-        var coinApi = coinApiService.findCoinApiByName(coins.getCoinName());
-        var bankBalance = new BankBalanceDto();
-        bankBalance.setClientName(client.getName());
-        bankBalance.setAccountNumber(account.getNumber());
-        bankBalance.setAmountCoins(coins.getAmountCoins());
-        bankBalance.setCoinName(coins.getCoinName());
-        var price = Double.parseDouble(coinApi.getPriceUsd());
-        bankBalance.setUsd(price * coins.getAmountCoins());
-        bankBalance.setBrl(bankBalance.getUsd()/ Double.parseDouble(coinExchangeService.getBrlValue().getBrl()));
-        return bankBalance;
+    public List<BankBalanceDto> getBankBalanceByAccount(Client client, Account account) throws IOException{
+        List<Coin> coins = coinDao.getBankBalanceByAccount(account.getId());
+        List<BankBalanceDto>  bankBalanceList = new ArrayList<>();
+        for (Coin coin : coins){
+            var coinApi = coinApiService.findCoinApiByName(coin.getCoinName());
+            var bankBalance = new BankBalanceDto();
+            bankBalance.setClientName(client.getName());
+            bankBalance.setAccountNumber(account.getNumber());
+            bankBalance.setAmountCoins(coin.getAmountCoins());
+            bankBalance.setCoinName(coin.getCoinName());
+            var price = Double.parseDouble(coinApi.getPriceUsd());
+            bankBalance.setUsd(price * coin.getAmountCoins());
+            bankBalance.setBrl(bankBalance.getUsd()/ Double.parseDouble(coinExchangeService.getBrlValue().getBrl()));
+            bankBalanceList.add(bankBalance);
+        }
+        return bankBalanceList;
     }
     
 }

@@ -1,4 +1,4 @@
-package com.bitbank.modelTest;
+package com.bitbank.model;
 
 
 import javax.persistence.EntityManager;

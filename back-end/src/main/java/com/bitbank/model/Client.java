@@ -3,6 +3,24 @@ package com.bitbank.model;
 import java.util.Collection;
 import java.util.List;
 
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +40,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.FieldError;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -68,12 +87,12 @@ public class Client implements UserDetails {
     private boolean admin;
    
 
-    @ManyToMany()
-    @JoinTable(name = "client_bank", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID"), 
-               inverseJoinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID"))
+    @ManyToMany
+    @JoinTable(name = "client_bank", joinColumns = @JoinColumn(name = "CLIENT_ID", referencedColumnName = "ID", unique = false), 
+               inverseJoinColumns = @JoinColumn(name = "BANK_ID", referencedColumnName = "ID" , unique = false))
     private List<Bank> bankList;
 
-  
+     
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -129,6 +148,29 @@ public class Client implements UserDetails {
         return this.login;
     }
 
+    public void validate() throws Exception {
+		List<FieldError> listFieldError = new ArrayList<FieldError>();
+		
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<Client>> constraintViolations = validator.validate(this);
+		
+		for (Iterator<ConstraintViolation<Client>> iterator = constraintViolations.iterator(); iterator.hasNext();) {
+			ConstraintViolation<Client> constraintViolation = (ConstraintViolation<Client>) iterator.next();
+			System.out.println("--------------------------*ERRO*---------------------------");
+			System.out.println(constraintViolation.getMessage());
+			System.out.println("--------------------------*ERRO*---------------------------");
+//					businessException.addErrorField(
+//				constraintViolation.getPropertyPath().toString(),
+//				constraintViolation.getMessage());
+			
+			listFieldError.add(new FieldError(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage(), constraintViolation, admin, null, null, email));
+		}
+		
+		if (listFieldError != null && listFieldError.size() > 0) {
+			throw new Exception("Campos inválidos");
+		}
+	}
    
     
     

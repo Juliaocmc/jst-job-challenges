@@ -1,5 +1,7 @@
 package com.bitbank.dao;
 
+import java.util.List;
+
 import com.bitbank.model.Coin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +16,6 @@ public interface CoinDao extends JpaRepository<Coin, String> {
     Coin getCoinByNameAndAccount(String coinName, String accountId);
 
     @Query(value="SELECT * FROM coin c where c.id = (select coin_id from account_coin ac where ac.account_id = :accountId)", nativeQuery = true)
-    Coin getBankBalanceByAccount(String accountId);
+    List<Coin> getBankBalanceByAccount(String accountId);
+    
 }

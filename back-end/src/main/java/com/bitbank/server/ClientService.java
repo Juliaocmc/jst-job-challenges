@@ -57,6 +57,7 @@ public class ClientService {
     public ClientDto relationshipBankClient(String clientId){
         var client = cd.getById(clientId);
         var clientDto = clientMapper.toDto(client);
+        clientDto.getListBank().clear();
         var bankList = bankDao.getListBankByClient(clientId);
         for (Bank bank : bankList) {
             var bankDto = bankMapper.toDto(bank);
