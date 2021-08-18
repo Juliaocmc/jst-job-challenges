@@ -148,30 +148,7 @@ public class Client implements UserDetails {
         return this.login;
     }
 
-    public void validate() throws Exception {
-		List<FieldError> listFieldError = new ArrayList<FieldError>();
-		
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<Client>> constraintViolations = validator.validate(this);
-		
-		for (Iterator<ConstraintViolation<Client>> iterator = constraintViolations.iterator(); iterator.hasNext();) {
-			ConstraintViolation<Client> constraintViolation = (ConstraintViolation<Client>) iterator.next();
-			System.out.println("--------------------------*ERRO*---------------------------");
-			System.out.println(constraintViolation.getMessage());
-			System.out.println("--------------------------*ERRO*---------------------------");
-//					businessException.addErrorField(
-//				constraintViolation.getPropertyPath().toString(),
-//				constraintViolation.getMessage());
-			
-			listFieldError.add(new FieldError(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage(), constraintViolation, admin, null, null, email));
-		}
-		
-		if (listFieldError != null && listFieldError.size() > 0) {
-			throw new Exception("Campos inválidos");
-		}
-	}
-   
+      
     
     
 }
