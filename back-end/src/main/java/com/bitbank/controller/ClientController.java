@@ -6,10 +6,12 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.Valid;
 
 import com.bitbank.dto.BankBalanceDto;
 import com.bitbank.dto.ClientDto;
 import com.bitbank.dto.ClientResumeDto;
+import com.bitbank.exception.RepositoryException;
 import com.bitbank.mapper.BankMapper;
 import com.bitbank.mapper.ClientMapper;
 import com.bitbank.model.Client;
@@ -19,6 +21,7 @@ import com.bitbank.server.ClientService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,12 +72,16 @@ public class ClientController {
     }
 
     @PostMapping("")
-    public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody ClientDto clientDto){
+    public @ResponseBody ResponseEntity<Client> saveClient(@Valid @RequestBody ClientDto clientDto){
+        try {
         var client = modelMapper.map(clientDto, Client.class);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         client.setPassword(passwordEncoder.encode(client.getPassword()));        
         cs.save(client);
         return ResponseEntity.ok(client);
+        } catch (RepositoryException e) {
+            return new ResponseEntity(e.getMessage(),  HttpStatus.BAD_REQUEST);
+        }
         
     }
 

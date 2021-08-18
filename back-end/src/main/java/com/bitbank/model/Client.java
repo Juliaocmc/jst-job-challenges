@@ -50,7 +50,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "client")
-public class Client implements UserDetails {
+public class Client extends BaseModel implements UserDetails {
     
     @EqualsAndHashCode.Include
     @Id
@@ -70,8 +70,8 @@ public class Client implements UserDetails {
 
     @Column(name = "cpf")
     @NotNull(message = "CPF cannot be null")
-    @Min(value = 10, message = "CPF should not be less than 18")
-    @Max(value = 11, message = "CPF should not be greater than 150")
+    @Min(value = 10, message = "CPF should not be less than 10")
+    @Max(value = 11, message = "CPF should not be greater than 11")
     private Long cpf;
 
     @Column(name = "email")

@@ -9,6 +9,8 @@ import java.util.List;
 import com.bitbank.dao.BankDao;
 import com.bitbank.dao.ClientDao;
 import com.bitbank.dto.ClientDto;
+import com.bitbank.exception.BusinessException;
+import com.bitbank.exception.RepositoryException;
 import com.bitbank.mapper.AccountMapper;
 import com.bitbank.mapper.BankMapper;
 import com.bitbank.mapper.ClientMapper;
@@ -34,8 +36,13 @@ public class ClientService {
     @Autowired
     BankDao bankDao;
     
-    public void save(Client client){
-        cd.save(client);
+    public void save(Client client) throws RepositoryException{
+        try {
+            client.validate();
+            cd.save(client);
+        } catch (BusinessException e) {            
+            throw new RepositoryException(e.getFieldErros());
+        }
     }
 
     public Client getById(String clientId){

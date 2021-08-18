@@ -40,7 +40,7 @@ public class ClientTest extends BaseServiceTest{
             client.setLogin(null);
             client.setName("Jaca");
             client.setPassword(null);
-            clientDao.save(client);        
+            client.validate();
 
             Assert.assertNotNull(client);
         } catch (Exception e) {
