@@ -17,27 +17,54 @@ public class CoinService {
     @Autowired
     CoinDao coinDao;
     
-    public void save(Coin coinId){
-        coinDao.save(coinId);
+    public void save(Coin coin){
+        try {
+            coin.validate();
+            coinDao.save(coin);
+        } catch (Exception e) {
+        }
     }
 
     public Coin getById(String coinId){
-        return coinDao.getById(coinId);
+        try {
+            
+            return coinDao.getById(coinId);
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public List<Coin> findAll(){
-        return coinDao.findAll();
+        try {
+            
+            return coinDao.findAll();
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public void update(Coin coin){
-        coinDao.save(coin);
+        try {
+            
+            coinDao.save(coin);
+        } catch (Exception e) {
+        }
     }
 
     public void delete(String coinId){
-        coinDao.deleteById(coinId);
+        try {
+            
+            coinDao.deleteById(coinId);
+        } catch (Exception e) {
+        }
     }
 
     public Coin getCoinByNameAndAccount(String coinId, String accountId){
-        return coinDao.getCoinByNameAndAccount(coinId, accountId);
+        try {
+            
+            return coinDao.getCoinByNameAndAccount(coinId, accountId);
+        } catch (Exception e) {
+        }
+        return null;
     }
 }

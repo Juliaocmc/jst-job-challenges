@@ -31,12 +31,20 @@ public class CoinApiController {
     
     @GetMapping(value = "")
     public CoinApi[] findAllCoinsApi() throws IOException {
-    return  coinApiService.findAllCoinsApi();
+        try {
+            return  coinApiService.findAllCoinsApi();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping(value = "/{coinName}")
     public CoinApi findCoinApiByName(@PathVariable String coinName)throws IOException {
-    return  coinApiService.findCoinApiByName(coinName);
+        try {
+            return  coinApiService.findCoinApiByName(coinName);
+        } catch (Exception e) {
+            return null;
+        }
         
     
     

@@ -49,50 +49,78 @@ public class AccountController {
 
     @GetMapping("")
     public ResponseEntity<List<AccountDto>> findAll() {
-        return ResponseEntity.ok(accountService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        try {
+            return ResponseEntity.ok(accountService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/{accountId}")
     public ResponseEntity<AccountDto> getAccountById(@PathVariable String accountId) {
-        var account = accountService.getById(accountId);
-        return ResponseEntity.ok(toDto(account));
+        try {
+            var account = accountService.getById(accountId);
+            return ResponseEntity.ok(toDto(account));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<AccountDto>> getAccountByClient(@PathVariable("clientId") String clientId ){        
-        return ResponseEntity.ok(accountService.getAccountByClient(clientId).stream().map(this::toDto).collect(Collectors.toList()));
+    public ResponseEntity<List<AccountDto>> getAccountByClient(@PathVariable("clientId") String clientId ){       
+        try {
+            return ResponseEntity.ok(accountService.getAccountByClient(clientId).stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            return null; 
+        }
     }
 
     @PostMapping("/{accountId}/client/{clientId}")
     public @ResponseBody ResponseEntity<String> depositCoins(@PathVariable("clientId") String clientId, 
     @PathVariable("accountId") String accountId, @RequestBody CoinDto coinDto ){   
-        if(accountService.clientHasAccount(clientId, accountId)){
-            var coin = modelMapper.map(coinDto, Coin.class);
-            accountService.depositCoins(coin, accountId);
-            return ResponseEntity.ok("deposit made successfully!:"+coin.getCoinName()+" Amount :" +coin.getAmountCoins()+" ");
+        try {
+            if(accountService.clientHasAccount(clientId, accountId)){
+                var coin = modelMapper.map(coinDto, Coin.class);
+                accountService.depositCoins(coin, accountId);
+                return ResponseEntity.ok("deposit made successfully!:"+coin.getCoinName()+" Amount :" +coin.getAmountCoins()+" ");
+            }
+            
+            return ResponseEntity.ok("Cliente não tem conta");
+        } catch (Exception e) {
+            return null;
         }
-
-        return ResponseEntity.ok("Cliente não tem conta");
         
     }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Account> save(@RequestBody AccountDto accountDto){
-        var account = modelMapper.map(accountDto, Account.class);
-        accountService.save(account);
-        return ResponseEntity.ok(account);
+        try {
+            var account = modelMapper.map(accountDto, Account.class);
+            accountService.save(account);
+            return ResponseEntity.ok(account);
+        } catch (Exception e) {
+            return null;
+        }
 
     }
 
     @DeleteMapping("/{accountId}")
     public ResponseEntity<String> delete(@PathVariable String accountId) {
-        accountService.delete(accountId);
-        return ResponseEntity.ok("Account successfully deleted!");
+        try {
+            accountService.delete(accountId);
+            return ResponseEntity.ok("Account successfully deleted!");
+        } catch (Exception e) {
+            return null;
+        }
 
     }
 
     private AccountDto toDto(Account account) {
-        return modelMapper.map(account, AccountDto.class);
+        try {
+            return modelMapper.map(account, AccountDto.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "coin")
-public class Coin implements Serializable{
+public class Coin extends BaseModel{
 
     @EqualsAndHashCode.Include
     @Id

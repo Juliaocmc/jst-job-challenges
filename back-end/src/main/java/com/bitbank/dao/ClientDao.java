@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface ClientDao extends JpaRepository<Client, String> {
 
     Client findByLogin(String login);
+    
 
 }

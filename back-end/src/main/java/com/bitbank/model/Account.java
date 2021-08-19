@@ -34,7 +34,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "account")
-public class Account implements Serializable {
+public class Account extends BaseModel {
     
     @EqualsAndHashCode.Include
     @Id

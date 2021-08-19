@@ -37,32 +37,52 @@ public class CoinController {
 
     @GetMapping("")
     public ResponseEntity<List<CoinDto>> findAll() {
-        return ResponseEntity.ok(coinService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        try {
+            return ResponseEntity.ok(coinService.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/{coinId}")
     public ResponseEntity<CoinDto> getUserById(@PathVariable String coinId) {
-        var coin = coinService.getById(coinId);
-        return ResponseEntity.ok(toDto(coin));
+        try {
+            var coin = coinService.getById(coinId);
+            return ResponseEntity.ok(toDto(coin));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PostMapping("")
     public @ResponseBody ResponseEntity<Coin> save(@RequestBody CoinDto coinDto){
-        var coin = modelMapper.map(coinDto, Coin.class);
-        coinService.save(coin);
-        return ResponseEntity.ok(coin);
+        try {
+            var coin = modelMapper.map(coinDto, Coin.class);
+            coinService.save(coin);
+            return ResponseEntity.ok(coin);
+        } catch (Exception e) {
+            return null;
+        }
 
     }
 
     @DeleteMapping("/{accountId}")
     public ResponseEntity<String> delete(@PathVariable String accountId) {
-        coinService.delete(accountId);
-        return ResponseEntity.ok("Coin successfully deleted!");
+        try {
+            coinService.delete(accountId);
+            return ResponseEntity.ok("Coin successfully deleted!");
+        } catch (Exception e) {
+            return null;
+        }
 
     }
 
     private CoinDto toDto(Coin account) {
-        return modelMapper.map(account, CoinDto.class);
+        try {
+            return modelMapper.map(account, CoinDto.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

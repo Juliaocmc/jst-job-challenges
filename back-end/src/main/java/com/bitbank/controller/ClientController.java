@@ -62,21 +62,27 @@ public class ClientController {
 
     @GetMapping("")
     public ResponseEntity<List<ClientResumeDto>> findAll() {
-        var clientList = cs.findAll();
-        return ResponseEntity.ok(clientMapper.toResumeDtoList(clientList));
+        try {
+            var clientList = cs.findAll();
+            return ResponseEntity.ok(clientMapper.toResumeDtoList(clientList));
+        } catch (Exception e) {
+            return null;
+        }
     }
     
     @GetMapping("/{clientId}")   
     public ClientDto getUserById(@PathVariable String clientId) {         
-        return cs.relationshipBankClient(clientId);
+        try {
+            return cs.relationshipBankClient(clientId);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PostMapping("")
-    public @ResponseBody ResponseEntity<Client> saveClient(@Valid @RequestBody ClientDto clientDto){
+    public @ResponseBody ResponseEntity<Client> saveClient(@RequestBody ClientDto clientDto){
         try {
-        var client = modelMapper.map(clientDto, Client.class);
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        client.setPassword(passwordEncoder.encode(client.getPassword()));        
+        var client = modelMapper.map(clientDto, Client.class);              
         cs.save(client);
         return ResponseEntity.ok(client);
         } catch (RepositoryException e) {
@@ -88,16 +94,24 @@ public class ClientController {
 
     @GetMapping("/{clientId}/account/{accountId}")
     public @ResponseBody ResponseEntity<List<BankBalanceDto>> getBankBalanceByAccount(@PathVariable("clientId") String clientId, @PathVariable("accountId") String accountId) throws IOException{
-        var client = cs.getById(clientId);
-        var account = as.getById(accountId);
-        var bankBalance = as.getBankBalanceByAccount(client, account);
-        return ResponseEntity.ok(bankBalance);
+        try {
+            var client = cs.getById(clientId);
+            var account = as.getById(accountId);
+            var bankBalance = as.getBankBalanceByAccount(client, account);
+            return ResponseEntity.ok(bankBalance);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @DeleteMapping("/{clientId}")
     public ResponseEntity<String> delete(@PathVariable String clientId) {
-        cs.delete(clientId);
-        return ResponseEntity.ok("Client successfully deleted!");
+        try {
+            cs.delete(clientId);
+            return ResponseEntity.ok("Client successfully deleted!");
+        } catch (Exception e) {
+        }
+        return null;
         
     }
 

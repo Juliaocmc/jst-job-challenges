@@ -38,6 +38,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
@@ -70,9 +71,8 @@ public class Client extends BaseModel implements UserDetails {
 
     @Column(name = "cpf")
     @NotNull(message = "CPF cannot be null")
-    @Min(value = 10, message = "CPF should not be less than 10")
-    @Max(value = 11, message = "CPF should not be greater than 11")
-    private Long cpf;
+    @CPF
+    private String cpf;
 
     @Column(name = "email")
     @NotNull(message = "E-mail cannot be null")
@@ -93,6 +93,11 @@ public class Client extends BaseModel implements UserDetails {
     private List<Bank> bankList;
 
      
+    
+    /** 
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -111,30 +116,50 @@ public class Client extends BaseModel implements UserDetails {
     }
 
    
+    
+    /** 
+     * @return Collection<? extends GrantedAuthority>
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isAccountNonExpired() {
         // TODO Auto-generated method stub
         return true;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isAccountNonLocked() {
         // TODO Auto-generated method stub
         return true;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         // TODO Auto-generated method stub
         return true;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isEnabled() {
         // TODO Auto-generated method stub
@@ -142,6 +167,10 @@ public class Client extends BaseModel implements UserDetails {
     }
 
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String getUsername() {
         // TODO Auto-generated method stub

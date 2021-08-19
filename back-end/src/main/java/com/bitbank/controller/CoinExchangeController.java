@@ -30,8 +30,12 @@ public class CoinExchangeController {
     
     @GetMapping(value = "")
     public CoinExchange getBrlValue() throws IOException{   
+        try {
             
-    return coinExchangeService.getBrlValue();
+            return coinExchangeService.getBrlValue();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
        

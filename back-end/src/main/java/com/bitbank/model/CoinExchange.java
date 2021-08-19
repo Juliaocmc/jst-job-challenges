@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CoinExchange {   
+public class CoinExchange extends BaseModel{   
     private String brl;
 
 }
