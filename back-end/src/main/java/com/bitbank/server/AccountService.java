@@ -49,10 +49,10 @@ public class AccountService {
         }
     }
 
-    public Account getById(String account) throws BusinessException{
+    public Account getById(String accountId) throws BusinessException{
         try {
             
-            return accountDao.getById(account);
+            return accountDao.getById(accountId);
         } catch (Exception e) {            
             throw new BusinessException("Não foi possível buscar o conta por Id");
         }
@@ -85,16 +85,15 @@ public class AccountService {
         }
     }
 
-    public Account createAccount() throws RepositoryException{
+    public Account createAccount() throws BusinessException{
         try {
             
             var account = new Account();
             account.setNumber(accountDao.getAccountNumber() + 1L);
-            account.validate();
             accountDao.save(account);
             return account;
-        } catch (BusinessException e) {            
-            throw new RepositoryException(e.getFieldErros());
+        } catch (Exception e) {            
+            throw new BusinessException("Não foi possível criar a conta");
         }
     }
 
@@ -155,7 +154,7 @@ public class AccountService {
                 bankBalance.setCoinName(coin.getCoinName());
                 var price = Double.parseDouble(coinApi.getPriceUsd());
                 bankBalance.setUsd(price * coin.getAmountCoins());
-                bankBalance.setBrl(bankBalance.getUsd()/ Double.parseDouble(coinExchangeService.getBrlValue().getBrl()));
+                bankBalance.setBrl(bankBalance.getUsd()* Double.parseDouble(coinExchangeService.getBrlValue().getBrl()));
                 bankBalanceList.add(bankBalance);
             }
             return bankBalanceList;

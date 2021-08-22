@@ -9,12 +9,9 @@ import com.bitbank.BitbankApplication;
 import com.bitbank.dao.ClientDao;
 import com.bitbank.server.ClientService;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -24,7 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 @Transactional
 
-public abstract class BaseServiceTest {
+public abstract class BaseModelTest {
 
 	@Autowired
     ClientDao clientDao;
@@ -33,19 +30,9 @@ public abstract class BaseServiceTest {
     ClientService clientService;
 	
 
-	
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	@Before
-	public void prepareDatabase() throws Exception {
-		
-	}
-
-	@After
-	@Rollback(true)
-	public void clearDatabase() {
-		// clearDataBase();
-	}
+	
 		
 }

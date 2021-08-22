@@ -16,8 +16,9 @@ public interface AccountDao extends JpaRepository<Account, String> {
     @Query( value = "SELECT count(*) FROM account", nativeQuery = true)
     Integer getAccountNumber();
 
-    @Query( value = "SELECT * FROM account a where a.client_id = :clientId", nativeQuery = true)
+    @Query( value = "SELECT * FROM account where client_id = :clientId", nativeQuery = true )
     List<Account> getAccountByClient(String clientId);
+
 
     
 }
