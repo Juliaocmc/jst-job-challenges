@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.bitbank.dao.BankDao;
 import com.bitbank.exception.BusinessException;
 import com.bitbank.exception.FieldError;
 
@@ -11,13 +12,23 @@ import org.apache.logging.log4j.util.Strings;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 
 public class ClientTest extends BaseModelTest{
 
     private String msg = "";
-    
+
+    @Autowired
+    BankDao bankDao;
+
+    @Test
+    public void onlytest(){
+        var bank = bankDao.getById("bef8d1b9-1fba-4f61-8e66-164fca6f043c");
+
+        System.out.println(bank);
+    }
     @Test
     public void deveCriarClient(){
         try {
@@ -30,6 +41,8 @@ public class ClientTest extends BaseModelTest{
             client.setPassword("123456");
             client.validate();
             clientDao.save(client);        
+
+            var teste = clientDao.getById(client.getId());
 
             Assert.assertNotNull(client);
         } catch (Exception e) {

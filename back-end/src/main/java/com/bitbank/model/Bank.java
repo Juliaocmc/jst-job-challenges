@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "bank")
-public class Bank extends BaseModel {
+public class Bank {
 
     @EqualsAndHashCode.Include
     @Id

@@ -67,7 +67,7 @@ public class BankController {
             var bank = bankMapper.toModel(bankDto);
             bankService.save(bank);
             return ResponseEntity.ok(bank);
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             return new ResponseEntity(e.getMessage(),  HttpStatus.BAD_REQUEST);
         }
         

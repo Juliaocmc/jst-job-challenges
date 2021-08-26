@@ -27,23 +27,15 @@ public class BankService {
     @Autowired
     AccountService accountService;
     
-    public void save(Bank bank) throws RepositoryException{
-        try {
-            
-            bank.validate();
-            bankDao.save(bank);
-        } catch (BusinessException e) {            
-            throw new RepositoryException(e.getFieldErros());
-        }
+    public void save(Bank bank) {
+        bankDao.save(bank);
     }
 
-    public Bank getById(String bankId) throws RepositoryException, BusinessException{
-        try {
+    public Bank getById(String bankId){
+        
             
             return bankDao.getById(bankId);
-        } catch (Exception e) {            
-            throw new BusinessException("Não foi possível buscar o banco por Id");
-        }
+        
     }
 
     public List<Bank> findAll(){
@@ -87,12 +79,5 @@ public class BankService {
         
     }
 
-    public List<Bank> getListBankByClient(String clientId){
-        try {
-            
-            return bankDao.getListBankByClient(clientId);
-        } catch (Exception e) {
-        }
-        return null;
-    }
+   
 }
